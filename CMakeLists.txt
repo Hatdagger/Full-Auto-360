@@ -19,6 +19,12 @@ rexglue_project(fullauto OUTPUT_DIR generated/default)
 # Host sources. src/main.cpp stays on the executable.
 set(FULLAUTO_HOST_SOURCES src/fullauto_hooks.cpp)
 
+# Test input for headless boot tests (docs/TESTING.md). Off in normal builds.
+option(FULLAUTO_TEST_INPUT "Build the test input hooks (FULLAUTO_TEST_AUTOPRESS)" OFF)
+if (FULLAUTO_TEST_INPUT)
+  list(APPEND FULLAUTO_HOST_SOURCES tests/test_input.cpp)
+endif ()
+
 # OBJECT and never STATIC, an archive drops the REX_EXPORT symbols.
 add_library(fullauto_common OBJECT ${FULLAUTO_HOST_SOURCES})
 rexglue_setup_host_library(fullauto_common)

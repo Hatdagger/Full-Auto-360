@@ -11,22 +11,27 @@ Each phase ends with something you can test.
 
 ## Phase 1 — First build
 
-- [x] Codegen passes validation: 0 errors on the first run, 100 C++ files (~105 MB) in 25 s
-- [x] Generated C++ compiles and links (Linux test build, Release, under 4 minutes)
-- [ ] Windows build with `build.bat` produces `fullauto.exe`
+- [x] Codegen passes validation (0 errors on the first run, 100 C++ files, ~105 MB)
+- [x] Generated C++ compiles (Linux test build; Windows not yet run)
+- [x] Links (Linux `fullauto`; Windows `fullauto.exe` not yet run)
+- Fixed: a fresh folder needs codegen, then a second CMake configure, then the build. `build.bat` does this.
 
 ## Phase 2 — Boot
 
-- [ ] Pseudo Interactive / SEGA splash screens (`piLaunch/*.dds`)
-- [ ] Title screen and "Press A"
-- [ ] Main menu (XUI: `Media/ui.xzp`)
-- [ ] Profile sign-in and save device prompts get sensible answers
+Headless tests (no picture, see [TESTING.md](TESTING.md)) reach all of these. They still need a look on a real screen.
+
+- [x] Pseudo Interactive / SEGA splash screens (`piLaunch/*.dds`) and the logo and intro videos
+- [x] Title screen and "Press A" (left alone, it goes back to the attract video after ~30 s)
+- [x] Main menu (XUI: `Media/ui.xzp`), driven by A presses
+- [x] Save device prompt answered; the game creates its profile save package
 - Known risk: the intro and attract videos are WMV through the XDK's XMV player; they may be black or skipped at first
 
 ## Phase 3 — Play offline
 
-- [ ] Load a track (`rtdXenon/*.pix`, `textures.pit`) and finish a race
-- [ ] Audio: XACT banks (`*.xwb/*.xsb`) and XMA music (`*.rxx`)
+- [ ] Load a track (`rtdXenon/*.pix`, `textures.pit`) and finish a race. Headless: `fa_T121` loads
+  and the race runs for 4+ minutes without a crash, after a jump table fix in the manifest
+- [ ] Audio: XACT banks (`*.xwb/*.xsb`) and XMA music (`*.rxx`). FFmpeg reports decode errors on
+  the race music; listen for glitches
 - [ ] Controller, then keyboard
 - [ ] Career saves
 - [ ] Unwreck (the time rewind) works and stays in sync

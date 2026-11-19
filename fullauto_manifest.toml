@@ -25,3 +25,13 @@ longjmp_address = 0x82580330
 # [entrypoint.functions]
 # 0x82001234 = {}
 # 0x82004321 = { size = 0x240 }
+
+# Jump tables that analysis sizes wrong go here. Each needs the address of the bctr, the index
+# register and every target, read from the table in the XEX.
+#
+# Track loader (sub_8230E1A8): a switch on a byte with no range check before it, so analysis
+# kept only the first of its 8 entries and the game stopped when a race started loading.
+[[switch_tables]]
+address = 0x8230E43C
+register = 4
+labels = [0x8230E460, 0x8230E49C, 0x8230E500, 0x8230E648, 0x8230EA4C, 0x8230ECB4, 0x8230EE28, 0x8230EE48]

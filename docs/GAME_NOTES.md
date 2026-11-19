@@ -67,6 +67,31 @@ Facts about the retail executable, gathered with `tools/xex_info.py` and `tools/
 
 The executable also looks for `D:\settings.psc`, `D:\TweakData_%s.psc` and `D:\pitaStats.txt`, and has debug strings for split screen tests and PIX captures.
 
+## Manual jump tables
+
+Kept in `[[switch_tables]]` in the manifest.
+
+| bctr | Index | Entries | Where |
+|---|---|---|---|
+| `0x8230E43C` | r4 | 8 (table at `0x8230E440`) | `sub_8230E1A8`, run by the loader threads when a race loads. The switch reads a byte with no range check, so analysis kept only the first entry |
+
+## Seen in headless tests
+
+- Boot: `smallF.dat`, `pitaLocal.psc`, `piLaunch/vshaders.dat`, `rtdXenon/textures.pit`, the sound
+  banks, `SEGA720.dds`, `Pseudo720.wmv`, `AttractLoop720.wmv`, then `title_screen1280x720.dds`,
+  `ui.xzp`, three fonts, `dw_piLX2.pix` and `fa_frontend.pix`.
+- Files the retail game looks for and does not have (normal, it carries on): `D:\pitaNot*.txt`,
+  `D:\pitaStats.txt`, `D:\DebugLevel.psc`, `D:\TweakData_*.psc`, `D:\pilaunch\special_32.abc`,
+  `D:\pilaunch\buttona.dds`, `buttonb.dds`, `hudgirder.dds`, `hudgirderholder.dds`,
+  `hudwinarrow.dds`, `hudframe.dds`.
+- Pressing A at the title: `XGIUserSetContextEx`, `XamContentCreateEnumerator` (no saves),
+  `XamShowDeviceSelectorUI`, then a content package `pprofilescript1.txt` is created and mounted
+  as `z:`. The file inside it is not found on the first run; check that saves stick.
+- Kernel calls ReXGlue does not implement yet: `XeKeysConsolePrivateKeySign` (likely save
+  signing) and `IoDismountVolumeByFileHandle`.
+- Race music (`*.rxx`, XMA): FFmpeg logs hundreds of decode errors per race ("would have to skip
+  N bits", "overflow in spectral RLE").
+
 ## If codegen reports an unresolved call
 
 ```

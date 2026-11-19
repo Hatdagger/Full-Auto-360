@@ -17,10 +17,10 @@ The game's PowerPC code is translated to C++ ahead of time with the [ReXGlue SDK
 | Game files pulled out of the Games on Demand package | ✅ |
 | Game executable analyzed (functions, imports, network calls) | ✅ |
 | ReXGlue project set up | ✅ |
-| Recompile to C++ (codegen) | ✅ no errors on the first run |
-| Compiles and links | ✅ tested on Linux · ⏳ Windows build next |
-| Boots to the title screen | ⬜ |
-| Races, audio, controller, saves | ⬜ |
+| Recompile to C++ (codegen) | ✅ |
+| Compiles and links | ✅ Linux test build · ⏳ Windows (first run on a PC) |
+| Boots to the title screen | ✅ in a headless test (no graphics yet) |
+| Races, audio, controller, saves | ⏳ a race loads and runs in a headless test; picture, sound and saves not checked yet |
 | Split screen (2–4 players) | ⬜ |
 | LAN races | ⬜ |
 | Online races | ⬜ |
@@ -71,6 +71,7 @@ The game itself thinks it is on Xbox Live. Plan and progress: [docs/NETWORK.md](
 - `src/` — game-specific host code and hooks
 - `tools/god_extract.py` — unpack a Games on Demand package or ISO (any OS)
 - `tools/xex_info.py` — dump the XEX headers, sections and imports
+- [docs/TESTING.md](docs/TESTING.md) — headless test runs on Linux (no GPU or controller needed)
 - [docs/GAME_NOTES.md](docs/GAME_NOTES.md) — what we know about the executable
 
 ## Credits

@@ -1,0 +1,26 @@
+# Full Auto (Xbox 360) - ReXGlue project manifest
+#
+# Title ID 534507D5, media ID 1D5F3880, XEX version 4 (Games on Demand copy, no title update
+# applied). The XEX is not in this repository: build.bat puts your own copy in game/.
+#
+# Codegen reads this file during every build. If a build stops with "Validation failed", the
+# log lists the addresses to add under [entrypoint.functions] (see docs/GAME_NOTES.md).
+
+[project]
+name = "fullauto"
+game_root = "game"
+hook_sources = ["src"]
+
+[entrypoint]
+file_path = "game/default.xex"
+out_directory_path = "generated/default"
+includes = []
+
+# CRT setjmp/longjmp, found by their register save/restore pattern (10 call sites use setjmp).
+setjmp_address = 0x82580690
+longjmp_address = 0x82580330
+
+# Functions that analysis cannot find on its own go here, e.g.
+# [entrypoint.functions]
+# 0x82001234 = {}
+# 0x82004321 = { size = 0x240 }

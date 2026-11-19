@@ -1,0 +1,22 @@
+# Your own game files. Never commit these (they are SEGA's, and they are 3.5 GB).
+game/
+*.xex
+*.iso
+*.part
+
+# Build output, downloaded SDK, codegen output, logs and your saves
+out/
+sdk/
+generated/
+logs/
+user/
+tools/bin/
+Play Full Auto.bat
+
+# Editor / OS noise
+.vs/
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+.DS_Store

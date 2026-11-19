@@ -17,8 +17,8 @@ The game's PowerPC code is translated to C++ ahead of time with the [ReXGlue SDK
 | Game files pulled out of the Games on Demand package | ✅ |
 | Game executable analyzed (functions, imports, network calls) | ✅ |
 | ReXGlue project set up | ✅ |
-| Recompile to C++ (codegen) | ⏳ first run on a PC |
-| Compiles and links | ⬜ |
+| Recompile to C++ (codegen) | ✅ no errors on the first run |
+| Compiles and links | ✅ tested on Linux · ⏳ Windows build next |
 | Boots to the title screen | ⬜ |
 | Races, audio, controller, saves | ⬜ |
 | Split screen (2–4 players) | ⬜ |

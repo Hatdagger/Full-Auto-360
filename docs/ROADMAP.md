@@ -11,9 +11,9 @@ Each phase ends with something you can test.
 
 ## Phase 1 — First build
 
-- [ ] Codegen passes validation (any "function in no function" errors get added to the manifest)
-- [ ] Generated C++ compiles (Release)
-- [ ] Links into `fullauto.exe`
+- [x] Codegen passes validation: 0 errors on the first run, 100 C++ files (~105 MB) in 25 s
+- [x] Generated C++ compiles and links (Linux test build, Release, under 4 minutes)
+- [ ] Windows build with `build.bat` produces `fullauto.exe`
 
 ## Phase 2 — Boot
 

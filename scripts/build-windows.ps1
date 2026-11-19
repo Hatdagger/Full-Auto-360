@@ -99,7 +99,12 @@ if (-not $Vs) {
         "--add", "Microsoft.VisualStudio.Component.VC.CMake.Project"
     )
     Say "Installing (a progress window will open; this can take a while)..."
-    $p = Start-Process -FilePath $bootstrap -ArgumentList $vsArgs -Verb RunAs -Wait -PassThru
+    # Wait for the installer itself only. Start-Process -Wait also waits for every process the
+    # installer leaves running in the background, which can keep this window waiting after the
+    # install is done.
+    $p = Start-Process -FilePath $bootstrap -ArgumentList $vsArgs -Verb RunAs -PassThru
+    $null = $p.Handle   # keeps the exit code readable after the installer ends
+    $p.WaitForExit()
     Say ("Installer finished with code " + $p.ExitCode)
     if ($p.ExitCode -ne 0 -and $p.ExitCode -ne 3010) { Fail "The Build Tools installer reported an error." }
     $Vs = Find-VS
@@ -202,20 +207,32 @@ if ($xexHash -ne "855AEFB7D2E227C8E71F33B6E68743CEC5FC6F9A") {
 }
 
 # ---------------------------------------------------------------------------------------------
+$BuildPreset = "win-amd64-" + $Config.ToLower()
+
 Step "Configuring (CMake)"
 Push-Location $Root
 $code = Run "cmake" @("--preset", "win-amd64")
 if ($code -ne 0) { Pop-Location; Fail "CMake configure failed." }
 
-Step ("Recompiling and building (" + $Config + "). The first build takes a long time.")
-$code = Run "cmake" @("--build", "--preset", ("win-amd64-" + $Config.ToLower()))
-Pop-Location
+# Codegen writes generated\default\sources.cmake, the list of recompiled C++ files. CMake reads
+# that list only when it configures, so codegen runs first and CMake configures again after it.
+# (One build on a fresh folder would run codegen and then link without the recompiled code.)
+Step "Recompiling the game code (PowerPC to C++)"
+$code = Run "cmake" @("--build", "--preset", $BuildPreset, "--target", "fullauto_codegen")
 if ($code -ne 0) {
+    Pop-Location
     if (Select-String -Path $Log -Pattern "Validation failed" -Quiet) {
         Fail "Codegen found functions it could not place. Tell Claude; the addresses are in the log."
     }
-    Fail "The build failed. Tell Claude; the details are in the log."
+    Fail "Codegen failed. Tell Claude; the details are in the log."
 }
+$code = Run "cmake" @("--preset", "win-amd64")
+if ($code -ne 0) { Pop-Location; Fail "CMake configure failed after codegen." }
+
+Step ("Compiling (" + $Config + "). The first build takes a long time.")
+$code = Run "cmake" @("--build", "--preset", $BuildPreset)
+Pop-Location
+if ($code -ne 0) { Fail "The build failed. Tell Claude; the details are in the log." }
 
 $Exe = Join-Path $Root ("out\build\win-amd64\" + $Config + "\fullauto.exe")
 if (-not (Test-Path $Exe)) { Fail ("Build finished but " + $Exe + " is missing.") }

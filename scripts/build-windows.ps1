@@ -129,12 +129,12 @@ if (-not (Get-Command "ninja" -ErrorAction SilentlyContinue)) {
     Expand-Archive -Path $nz -DestinationPath $ToolBin -Force
     $env:PATH = $ToolBin + ";" + $env:PATH
 }
-$clangVer = (& clang++ --version | Select-Object -First 1)
+$clangVer = (& "clang++" --version | Select-Object -First 1)
 Say ("Compiler: " + $clangVer)
 if ($clangVer -match "version (\d+)\.") {
     if ([int]$Matches[1] -lt 20) { Fail ("ReXGlue needs Clang 20 or newer, found " + $clangVer + ". Update the Build Tools.") }
 }
-Say ("CMake: " + (& cmake --version | Select-Object -First 1))
+Say ("CMake: " + (& "cmake" --version | Select-Object -First 1))
 
 # ---------------------------------------------------------------------------------------------
 Step ("Getting the ReXGlue SDK " + $SdkVersion)
